@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -22,9 +22,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
   ],
   templateUrl: './feedback.component.html',
-  styleUrl: './feedback.component.css'
+  styleUrl: './feedback.component.css',
 })
-export class FeedbackComponent {
+export class FeedbackComponent implements OnInit {
+  fb!: FormGroup;
+  form!: FormGroup;
+  feedbackForm: any;
+  submit() {
+    throw new Error('Method not implemented.');
+  }
   headerText: string = "Give feedback";
 
   fbForm: FormGroup = new FormGroup({
@@ -33,12 +39,20 @@ export class FeedbackComponent {
     name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z ]*$')]),
     email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', [Validators.required, Validators.minLength(10)]),
-    termsAndConditions: new FormControl('')
+    checkbox: new FormControl('')
   });
-
-  constructor(public router: Router) { }
+  
+  constructor(public router: Router) {}
 
   ngOnInit(): void {
+    agree: new FormControl(false, Validators.requiredTrue)
+    this.form = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z ]*$")]),
+      email: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")]),
+      phone: new FormControl('', [Validators.required, Validators.pattern("^[0-9]{10}$")]),
+      message: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      checkbox: new FormControl(false, Validators.requiredTrue)
+    });
   }
 
   cancel() {
@@ -74,7 +88,7 @@ export class FeedbackComponent {
     return this.fbForm.get('phone');
   }
 
-  get termsAndConditions() {
-    return this.fbForm.get('termsAndConditions');
+  get checkbox() {
+    return this.fbForm.get('checkbox');
   }
 }
